@@ -1,13 +1,13 @@
 ![alt text](https://ohioh.de/wp-content/uploads/2020/10/cropped-logo_big-768x496.png)
 
-## Welcome to this repository for the HELTEC Wireless Stick ( aka. Gecko-Board )
+## Welcome to this repository for the HELTEC Wireless Stick aka. Gecko-Board 
 
 
 This repository should be a fast start guide to code with the Wireless-Stick in Visual Studio Code.
 
 Here are more informations about the Board: [heltec-homepage](https://heltec.org/project/wireless-stick/)
 
-Pin-Out Diagram:[PinOut-PDF](https://resource.heltec.cn/download/Wireless_Stick/Wireless_Stick.pdf)
+Pin-Out Diagram: [PinOut-PDF](https://resource.heltec.cn/download/Wireless_Stick/Wireless_Stick.pdf)
 
 * 1. Step: Install Visual Studio Code
 * 2. Step: Install PlatformIO in VSC
