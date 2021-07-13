@@ -114,7 +114,7 @@ static void ADC_Process(uint16_t val){
 }
 #define Vext 21
 // Add your initialization code here
-void setup()
+void setupLoRaCPP()
 {
   Serial.begin(115200);
   while (!Serial);
@@ -128,7 +128,7 @@ void setup()
 }
 
 // The loop function is called in an endless loop
-void loop()
+void loopLoRaCPP()
 {
   switch( deviceState )
   {
