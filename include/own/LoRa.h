@@ -40,10 +40,14 @@ Task:
 #include "TTN_BLE_esp32.h"
 #include <TTN_esp32.h>
 #include "TTN_CayenneLPP.h"
+#include "blinkLED.h"
 
 // wireless stick pinout
 
+// Intervall to repeat the sending process
+// TODO: brint the interval as an given input
 #define INTERVAL 30000
+
 TTN_esp32 ttn;
 TTN_BLE_esp32 ble;
 TTN_CayenneLPP lpp;
@@ -65,7 +69,7 @@ void setupLoRa() {
 	{
 		Serial.println("No key are provisioned, please press the User Button\n\
                         then launch the \'TTN ESP32 Prosioning\' Android App \n\
-                        Select the RGOT_... device and provisioning the keys\n\
+                        Select the OHIOH_... device and provisioning the keys\n\
                         Quit the android App, then the esp32 restart...	");
 	}
 	pinMode(KEY_BUILTIN, INPUT);
@@ -74,7 +78,7 @@ void setupLoRa() {
 }
 
 /* Loop takes input to send via LoRaWan */
-void loopLoRa(int input) {
+void loopLoRa() {
 
 	static bool jonction = false;
 	static float nb = 0.0;
@@ -110,6 +114,71 @@ void loopLoRa(int input) {
                 {
 				    Serial.printf("envoi reussi : %d %x %02X%02X\n", lpp.getBuffer()[0], lpp.getBuffer()[1], lpp.getBuffer()[2], lpp.getBuffer()[3]);
 			    }
+			}
+			
+			previoumillis = millis();
+		}
+	}
+	else {
+
+		if (ttn.isRunning())
+		{
+			Serial.print(".");
+			delay(500);
+		}
+			
+	}	   	 	
+
+ }
+
+
+/* Loop takes input to send via LoRaWan */
+// The input float sensordata takes the information single time and send it to TTN Backend
+//addDigitalInput(uint8_t channel, uint8_t value)
+//addAnalogInput(uint8_t channel, float value)
+void loopLoRaDataDigital(char16_t sensordata) {
+
+	static bool jonction = false;
+	static float data = sensordata;
+	static unsigned previoumillis = 0;
+
+	if (!digitalRead(KEY_BUILTIN) && !ble.getInitialized())
+	{
+		ttn.stop();
+		ble.begin();			
+			digitalWrite(LED, HIGH);	
+		while (!digitalRead(KEY_BUILTIN));			
+	}
+	
+	if (ttn.isJoined())
+	{
+		if (!jonction)
+		{
+			ttn.showStatus();
+			jonction = true;
+		}
+
+		if (millis() - previoumillis > INTERVAL)
+		{
+			if (ttn.isRunning())
+			{
+			    
+				/*get the data by function from the server or direct*/
+				/* TODO: seperate time loop in main function */
+			
+                /*adding the Temerature to the send Bytes*/
+                lpp.reset();
+			    // lpp.addDigitalInput(1, data);
+				lpp.addAnalogInput(1, data);
+
+				digitalWrite(LED, HIGH);
+				delay(500);
+
+			    if (ttn.sendBytes(lpp.getBuffer(), lpp.getSize(), 1, 1)) 
+                {
+				    Serial.printf("Sent: %d %x %02X%02X\n", lpp.getBuffer()[0], lpp.getBuffer()[1], lpp.getBuffer()[2], lpp.getBuffer()[3]);
+			    	digitalWrite(LED, LOW);
+				}
 			}
 			
 			previoumillis = millis();

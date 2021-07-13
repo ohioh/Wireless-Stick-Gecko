@@ -25,16 +25,18 @@ Task: Handle multicore processing to messure plugged in sensors and send
 
 #include <Arduino.h>
 #include <SPI.h>
-#include "blinkLED.h"
-#include "getChipID.h"
-#include "LEDCSoftwareFade.h"
-#include "eeprom_class.h"
-#include "eeprom_write.h"
-#include "deepSleepMode.h"
-#include "getNetBIOS.h"
-#include "startFreeRTOS.h"
-#include "getTime.h"
-#include "LoRa.h"
+#include <own/blinkLED.h>
+#include <own/getChipID.h>
+#include <own/LEDCSoftwareFade.h>
+#include <own/eeprom_class.h>
+#include <own/eeprom_write.h>
+#include <own/deepSleepMode.h>
+#include <getNetBIOS.h>
+#include <own/startFreeRTOS.h>
+#include <own/getTime.h>
+#include <own/LoRa.h>
+
+
 
 void setup() {
 
@@ -51,6 +53,13 @@ void setup() {
   startEEPROM_Write();
   setupFreeRTOS();
   */
+  getChipID(); 
+  setupLoRa();
+
+  // set variables for the sensordata
+  
+
+
   
 }
 
@@ -62,5 +71,8 @@ void loop() {
   loopEEPROM_Write();
   setupDeepSleep();
   */
+  char16_t data[] = hello; // or "z\u00df\u6c34\U0001f34c"
+  loopLoRaDataDigital(data);
+
   
 }

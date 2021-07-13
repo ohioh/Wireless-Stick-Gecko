@@ -2,7 +2,7 @@
 #include <SPI.h>
 #define led 25
   
-int blinkingLED(int timeOff, int timeOn)
+int blinkingLED (int timeOff, int timeOn)
 { 
     /* code */
     pinMode(led,OUTPUT);
